@@ -18,7 +18,7 @@ const newCycleFormSchema = z.object({
 export type NewCycleFormData = z.infer<typeof newCycleFormSchema>
 
 export function Home() {
-  const { activeCycle, handleCreateNewCycle, handleInterruptCycle } =
+  const { activeCycle, createNewCycle, handleInterruptCycle } =
     useContext(CyclesContext)
 
   const newCycleForm = useForm<NewCycleFormData>({
@@ -29,13 +29,18 @@ export function Home() {
     },
   })
 
-  const { watch, handleSubmit } = newCycleForm
+  const { watch, handleSubmit, reset } = newCycleForm
+
+  const handleCreateNewCycle = handleSubmit((data) => {
+    createNewCycle(data)
+    reset()
+  })
 
   const isSubmitDisabled = !watch('task')
 
   return (
     <Container>
-      <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
+      <form action="" onSubmit={handleCreateNewCycle}>
         <FormProvider {...newCycleForm}>
           <NewCycleForm />
         </FormProvider>
